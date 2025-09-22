@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <climits>
+using namespace std;
 
 struct Process {
     int pid;
@@ -41,20 +42,20 @@ struct Process {
           startTime(-1), started(false) {}
 };
 
-std::vector<Process> processes;
+vector<Process> processes;
 
-void readProcessesFromFile(const std::string& filename) {  
-    std::ifstream file(filename);
+void readProcessesFromFile(const string& filename) {  
+    ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "Error: Could not open " << filename << std::endl;  
+        cout << "Error: Could not open " << filename << std::endl;  
         return;
     }
     
-    std::string line;
-    std::getline(file, line);  
+    string line;
+    getline(file, line);  
     
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
+    while (getline(file, line)) {
+        stringstream ss(line);
         int pid, arrival, burst, priority;
         
         if (ss >> pid >> arrival >> burst >> priority) {
@@ -63,5 +64,5 @@ void readProcessesFromFile(const std::string& filename) {
     }
     
     file.close();
-    std::cout << "Successfully loaded " << processes.size() << " processes from " << filename << std::endl;
+    cout << "Successfully loaded " << processes.size() << " processes from " << filename << std::endl;
 }

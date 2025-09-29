@@ -22,7 +22,7 @@ struct Process {
     bool started;
     
     // Default constructor
-    Process() {
+   Process() {
         pid = 0;
         arrivalTime = 0;
         burstTime = 0;

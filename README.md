@@ -1,14 +1,27 @@
 # Process Scheduling Simulator
 
-A C++ implementation of CPU scheduling algorithms including FCFS, SJF, Round Robin, and Priority Scheduling.
+A C++ implementation of CPU scheduling algorithms for Operating Systems education.
 
-## Features
-- 4 scheduling algorithms
-- Gantt chart visualization
-- Performance metrics calculation
-- File-based process input
+## 🎯 Features
 
-## Quick Start
+- **Four Scheduling Algorithms:**
+  - First-Come, First-Served (FCFS)
+  - Shortest Job First (SJF)
+  - Round Robin (RR)
+  - Priority Scheduling
+
+- **Visual Output:**
+  - Gantt chart generation
+  - Detailed metrics table
+  - Performance comparisons
+
+## 🛠️ Installation
+
+### Prerequisites
+- C++ compiler (g++ 7.0 or higher)
+- Make utility
+
+### Build & Run
 ```bash
 git clone https://github.com/yourusername/process-scheduling-simulator.git
 cd process-scheduling-simulator

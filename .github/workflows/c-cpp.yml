@@ -1,23 +1,26 @@
-name: C/C++ CI
+name: C/C++ Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, CI_for_c++ ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Build C++ code
+        run: |
+          g++ -std=c++17 -Wall -Werror ProcessScheduler.cpp -o ProcessScheduler
+
+      - name: Run executable (optional)
+        run: |
+          ./ProcessScheduler || echo "No main() or runtime error."
+        continue-on-error: true

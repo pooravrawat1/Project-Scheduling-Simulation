@@ -1,0 +1,25 @@
+# Compiled files
+*.o
+*.out
+*.exe
+a.out
+*.so
+*.dylib
+
+# Build directories
+bin/
+build/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# OS files
+Thumbs.db
+
+# Temporary files
+*.tmp
+temp/

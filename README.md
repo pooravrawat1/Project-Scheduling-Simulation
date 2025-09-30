@@ -27,3 +27,5 @@ git clone https://github.com/yourusername/process-scheduling-simulator.git
 cd process-scheduling-simulator
 make
 ./bin/scheduler
+
+

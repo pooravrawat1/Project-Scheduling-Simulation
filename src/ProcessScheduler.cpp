@@ -94,63 +94,6 @@ void runFCFS(){
 
 }
 
-void runSJF() {
-    cout << "\n========================================" << endl;
-    cout << "SHORTEST JOB FIRST (SJF)" << endl;
-    cout << "========================================" << endl;
-    
-    vector<Process> sjfProcesses = processes;
-    vector<bool> isCompleted(sjfProcesses.size(), false);  // Track which processes are done
-    vector<string> ganttChart;
-    vector<int> timePoints;
-    
-    int currentTime = 0;
-    int completedCount = 0;
-    timePoints.push_back(0);
-    
-    // Keep running until all processes are complete
-    while (completedCount < sjfProcesses.size()) {
-        int selectedIdx = -1;  // Which process to run
-        int minBurstTime = INT_MAX;  // Find shortest burst time
-        
-        // Look through all processes
-        for (size_t i = 0; i < sjfProcesses.size(); i++) {
-            // Check if process: has arrived, not completed, and has shortest burst
-            if (sjfProcesses[i].arrivalTime <= currentTime && 
-                !isCompleted[i] && 
-                sjfProcesses[i].burstTime < minBurstTime) {
-                
-                minBurstTime = sjfProcesses[i].burstTime;
-                selectedIdx = i;  // This is our chosen process
-            }
-        }
-        
-        // If no process is ready, advance time
-        if (selectedIdx == -1) {
-            currentTime++;
-            continue;
-        }
-        
-        // Execute the selected process
-        Process& selected = sjfProcesses[selectedIdx];
-        selected.startTime = currentTime;
-        selected.completionTime = currentTime + selected.burstTime;
-        selected.turnaroundTime = selected.completionTime - selected.arrivalTime;
-        selected.waitingTime = selected.turnaroundTime - selected.burstTime;
-        
-        // Add to Gantt chart
-        ganttChart.push_back("P" + to_string(selected.pid));
-        currentTime = selected.completionTime;
-        timePoints.push_back(currentTime);
-        
-        isCompleted[selectedIdx] = true;  // Mark as done
-        completedCount++;
-    }
-    
-    //displayGanttChart(ganttChart, timePoints);
-    //displayResults(sjfProcesses, "SJF");
-}
-
 void runRoundRobin {
     cout << "\n========================================" << endl;
     cout << "ROUND ROBIN (RR)" << endl;

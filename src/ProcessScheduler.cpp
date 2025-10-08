@@ -245,6 +245,62 @@ void runRoundRobin {
     
     displayGanttChart(ganttChart, timePoints);
     displayResults(rrProcesses, "Round Robin (Quantum=" + to_string(quantum) + ")");
-    
 
+}
+
+// Algorithm 4: Priority Scheduling
+// Process with highest priority (lowest number) runs first
+void runPriority() {
+    cout << "\n========================================" << endl;
+    cout << "PRIORITY SCHEDULING" << endl;
+    cout << "(Lower number = Higher priority)" << endl;
+    cout << "========================================" << endl;
+    
+    vector<Process> priorityProcesses = processes;
+    vector<bool> isCompleted(priorityProcesses.size(), false);
+    vector<string> ganttChart;
+    vector<int> timePoints;
+    
+    int currentTime = 0;
+    int completedCount = 0;
+    timePoints.push_back(0);
+    
+    while (completedCount < priorityProcesses.size()) {
+        int selectedIdx = -1;
+        int highestPriority = INT_MAX;  // Remember: lower number = higher priority
+        
+        // Find the highest priority process that's ready
+        for (size_t i = 0; i < priorityProcesses.size(); i++) {
+            if (priorityProcesses[i].arrivalTime <= currentTime && 
+                !isCompleted[i] && 
+                priorityProcesses[i].priority < highestPriority) {
+                
+                highestPriority = priorityProcesses[i].priority;
+                selectedIdx = i;
+            }
+        }
+        
+        // No process ready, advance time
+        if (selectedIdx == -1) {
+            currentTime++;
+            continue;
+        }
+        
+        // Execute selected process
+        Process& selected = priorityProcesses[selectedIdx];
+        selected.startTime = currentTime;
+        selected.completionTime = currentTime + selected.burstTime;
+        selected.turnaroundTime = selected.completionTime - selected.arrivalTime;
+        selected.waitingTime = selected.turnaroundTime - selected.burstTime;
+        
+        ganttChart.push_back("P" + to_string(selected.pid));
+        currentTime = selected.completionTime;
+        timePoints.push_back(currentTime);
+        
+        isCompleted[selectedIdx] = true;
+        completedCount++;
+    }
+    
+    displayGanttChart(ganttChart, timePoints);
+    displayResults(priorityProcesses, "Priority Scheduling");
 }

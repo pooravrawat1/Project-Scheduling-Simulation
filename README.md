@@ -9,9 +9,7 @@ A comprehensive C++ program that simulates various CPU scheduling algorithms use
 This simulator implements **4 major scheduling algorithms**:
 
 1. **First-Come, First-Served (FCFS)** - Processes execute in arrival order
-2. **Shortest Job First (SJF)** - Shortest burst time gets priority
-3. **Round Robin (RR)** - Each process gets a time quantum
-4. **Priority Scheduling** - Higher priority processes run first
+2. **Round Robin (RR)** - Each process gets a time quantum
 
 ### What You'll See:
 

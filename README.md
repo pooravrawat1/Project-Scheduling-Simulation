@@ -180,6 +180,4 @@ When selecting Round Robin, experiment with different quantum values:
 | Algorithm    | Best For               | Worst For                       | Complexity |
 | ------------ | ---------------------- | ------------------------------- | ---------- |
 | **FCFS**     | Simple, predictable    | Short jobs behind long jobs     | O(n log n) |
-| **SJF**      | Minimizing wait time   | Starvation of long jobs         | O(n²)      |
 | **RR**       | Time-sharing, fairness | Overhead from context switching | O(n)       |
-| **Priority** | Important tasks first  | Starvation of low priority      | O(n²)      |

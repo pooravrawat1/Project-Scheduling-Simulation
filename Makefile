@@ -10,15 +10,15 @@ all: $(TARGET)
 
 # Build the executable
 $(TARGET): $(SOURCE)
-    $(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCE)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCE)
 
 # Clean compiled files
 clean:
-    rm -f $(TARGET)
+	rm -f $(TARGET)
 
 # Run the program
 run: $(TARGET)
-    ./$(TARGET)
+	./$(TARGET)
 
 # Force rebuild
 rebuild: clean all

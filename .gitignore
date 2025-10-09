@@ -5,6 +5,7 @@
 a.out
 *.so
 *.dylib
+scheduler
 
 # Build directories
 bin/

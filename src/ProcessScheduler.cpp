@@ -81,18 +81,32 @@ void displayProcesses(const vector<Process>& procs) {
 }
 
 void displayGanttChart(const vector<string>& chart, const vector<int>& times) {
-    cout << "\nGantt Chart (Process Execution Timeline):" << endl;
-    
-    // Print the process blocks
+    cout << "\nGantt Chart (Process Execution Timeline):\n" << endl;
+
+    // Top border
+    cout << " ";
+    for (size_t i = 0; i < chart.size(); i++) {
+        cout << "-------";
+    }
+    cout << "-" << endl;
+
+    // Process names inside boxes
     cout << "|";
-    for (const auto& process : chart) {
-        cout << " " << setw(4) << left << process << " |";
+    for (size_t i = 0; i < chart.size(); i++) {
+        cout << "  " << setw(3) << left << chart[i] << " |";
     }
     cout << endl;
-    
-    // Print the time points below
+
+    // Bottom border
+    cout << " ";
+    for (size_t i = 0; i < chart.size(); i++) {
+        cout << "-------";
+    }
+    cout << "-" << endl;
+
+    // Time labels
     for (size_t i = 0; i < times.size(); i++) {
-        cout << setw(7) << left << times[i];
+        cout << setw(6) << left << times[i];
     }
     cout << endl;
 }

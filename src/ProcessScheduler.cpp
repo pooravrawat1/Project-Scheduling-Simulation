@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <climits>
+
 using namespace std;
 
 struct Process {
@@ -22,7 +23,7 @@ struct Process {
     bool started;
     
     // Default constructor
-   Process() {
+    Process() {
         pid = 0;
         arrivalTime = 0;
         burstTime = 0;
@@ -47,7 +48,7 @@ vector<Process> processes;
 void readProcessesFromFile(const string& filename) {  
     ifstream file(filename);
     if (!file.is_open()) {
-        cout << "Error: Could not open " << filename << std::endl;  
+        cout << "Error: Could not open " << filename << endl;
         return;
     }
     
@@ -64,19 +65,81 @@ void readProcessesFromFile(const string& filename) {
     }
     
     file.close();
-    cout << "Successfully loaded " << processes.size() << " processes from " << filename << std::endl;
+    cout << "Successfully loaded " << processes.size() << " processes from " << filename << endl;
 }
 
-void runFCFS(){ 
-    //Get Process 
+// Display loaded processes
+void displayProcesses(const vector<Process>& procs) {
+    cout << "\nProcess Information:" << endl;
+    cout << "PID\tArrival\tBurst\tPriority" << endl;
+    cout << "---\t-------\t-----\t--------" << endl;
+    
+    for (const auto& p : procs) {
+        cout << p.pid << "\t" << p.arrivalTime << "\t" 
+             << p.burstTime << "\t" << p.priority << endl;
+    }
+}
+
+void displayGanttChart(const vector<string>& chart, const vector<int>& times) {
+    cout << "\nGantt Chart (Process Execution Timeline):" << endl;
+    
+    // Print the process blocks
+    cout << "|";
+    for (const auto& process : chart) {
+        cout << " " << setw(4) << left << process << " |";
+    }
+    cout << endl;
+    
+    // Print the time points below
+    for (size_t i = 0; i < times.size(); i++) {
+        cout << setw(7) << left << times[i];
+    }
+    cout << endl;
+}
+
+// Display results with waiting time and turnaround time
+void displayResults(vector<Process>& procs, const string& algorithm) {
+    cout << "\n" << algorithm << " Results:" << endl;
+    cout << "PID\tArrival\tBurst\tComplete\tTurnaround\tWaiting" << endl;
+    cout << "---\t-------\t-----\t--------\t----------\t-------" << endl;
+    
+    double totalWT = 0, totalTAT = 0;
+    
+    // Print each process's metrics
+    for (const auto& p : procs) {
+        cout << p.pid << "\t" << p.arrivalTime << "\t" << p.burstTime 
+             << "\t" << p.completionTime << "\t\t" << p.turnaroundTime 
+             << "\t\t" << p.waitingTime << endl;
+        
+        totalWT += p.waitingTime;
+        totalTAT += p.turnaroundTime;
+    }
+    
+    // Calculate and display averages
+    cout << "\n*** Average Waiting Time: " << fixed << setprecision(2) 
+         << totalWT / procs.size() << " ***" << endl;
+    cout << "*** Average Turnaround Time: " << fixed << setprecision(2) 
+         << totalTAT / procs.size() << " ***" << endl;
+}
+
+void runFCFS() { 
+    cout << "\n========================================" << endl;
+    cout << "FIRST-COME, FIRST-SERVED (FCFS)" << endl;
+    cout << "========================================" << endl;
+    
+    // Get Process 
     vector<Process> fcfsProcesses = processes;
+    
+    vector<string> ganttChart;
+    vector<int> timePoints;
+    timePoints.push_back(0);  // Start at time 0
 
     // Sort by arrival time
     sort(fcfsProcesses.begin(), fcfsProcesses.end(), [](const Process& a, const Process& b) {
         return a.arrivalTime < b.arrivalTime;
     });
 
-    //Excecute in order of arrival time
+    // Execute in order of arrival time
     int currentTime = 0;
     for (auto& p : fcfsProcesses) {
         if (currentTime < p.arrivalTime) {
@@ -86,38 +149,42 @@ void runFCFS(){
         p.completionTime = currentTime + p.burstTime;
         p.turnaroundTime = p.completionTime - p.arrivalTime;
         p.waitingTime = p.turnaroundTime - p.burstTime;
+        
+        // FIXED: Add to Gantt chart
+        ganttChart.push_back("P" + to_string(p.pid));
         currentTime = p.completionTime;
+        timePoints.push_back(currentTime);
     }
 
-    //displayGanttChart(ganttChart, timePoints);
-    //displayResults(fcfsProcesses, "FCFS");
-
+    displayGanttChart(ganttChart, timePoints);
+    displayResults(fcfsProcesses, "FCFS");
 }
 
-void runRoundRobin {
+
+void runRoundRobin() {
     cout << "\n========================================" << endl;
     cout << "ROUND ROBIN (RR)" << endl;
     cout << "========================================" << endl;
 
     int quantum;
-    cout << "Enter Time Quantum (2 or 3): " << endl;
+    cout << "Enter Time Quantum (2 or 3): ";  
     cin >> quantum;
 
-    vector<processes> rrProcess = processes;
-    queue<processes*> readyQueue;
+    vector<Process> rrProcesses = processes;
+    queue<Process*> readyQueue;
     vector<string> ganttChart;
     vector<int> timePoints;
 
     int currentTime = 0;
-    int completedCount =0;
-    timePoints.push_back = 0
+    int completedCount = 0;
+    timePoints.push_back(0);
 
-    sort(rrProcess.begin(), rrProcess.end(),
+    sort(rrProcesses.begin(), rrProcesses.end(),
         [](const Process& a, const Process& b) {
             return a.arrivalTime < b.arrivalTime;
         });
 
-    vector<bool> inQueue(rrProcess.size(), false);
+    vector<bool> inQueue(rrProcesses.size(), false);
 
     for (size_t i = 0; i < rrProcesses.size(); i++) {
         if (rrProcesses[i].arrivalTime <= currentTime) {
@@ -126,18 +193,20 @@ void runRoundRobin {
         }
     }
 
-    while (completedCount < rrProcess.size()) {
+    while (completedCount < (int)rrProcesses.size()) {  
         if (readyQueue.empty()) {
-            for (size_t i = 0; i << rrProcesses.size(); i++) {
+            currentTime++;  
+            for (size_t i = 0; i < rrProcesses.size(); i++) {
                 if (rrProcesses[i].arrivalTime <= currentTime && 
                     rrProcesses[i].remainingTime > 0 && !inQueue[i]) {
                     readyQueue.push(&rrProcesses[i]);
                     inQueue[i] = true;
                 }
             }
-            continue
+            continue;
         }
-     Process* current = readyQueue.front();
+        
+        Process* current = readyQueue.front();
         readyQueue.pop();
         
         // Find the index of current process
@@ -188,5 +257,56 @@ void runRoundRobin {
     
     displayGanttChart(ganttChart, timePoints);
     displayResults(rrProcesses, "Round Robin (Quantum=" + to_string(quantum) + ")");
+}
 
+
+int main() {
+    cout << "========================================" << endl;
+    cout << "    PROCESS SCHEDULING SIMULATOR" << endl;
+    cout << "========================================" << endl;
+    cout << "\nMake sure 'processes.txt' is in the same folder!" << endl << endl;
+    
+    // Load processes from file
+    readProcessesFromFile("processes.txt");
+    
+    // Check if processes were loaded
+    if (processes.empty()) {
+        cout << "\nNo processes were loaded!" << endl;
+        cout << "Please create a processes.txt file with format:" << endl;
+        cout << "PID Arrival_Time Burst_Time Priority" << endl;
+        cout << "1 0 5 2" << endl;
+        cout << "2 2 3 1" << endl;
+        return 1;
+    }
+    
+    // Show loaded processes
+    displayProcesses(processes);
+    
+    // Main menu loop
+    int choice;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "SELECT AN OPTION:" << endl;
+        cout << "1. First-Come, First-Served (FCFS)" << endl;
+        cout << "2. Round Robin (RR)" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                runFCFS();
+                break;
+            case 2:
+                runRoundRobin();
+                break;
+            case 0:
+                cout << "\nThank you for using the Process Scheduler!" << endl;
+                break;
+            default:
+                cout << "\nInvalid choice! Please enter 0-3." << endl;
+        }
+    } while (choice != 0);
+    
+    return 0;
 }

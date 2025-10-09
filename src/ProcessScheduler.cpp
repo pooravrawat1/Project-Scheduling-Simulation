@@ -304,7 +304,7 @@ int main() {
                 cout << "\nThank you for using the Process Scheduler!" << endl;
                 break;
             default:
-                cout << "\nInvalid choice! Please enter 0-3." << endl;
+                cout << "\nInvalid choice! Please enter 0-2." << endl;
         }
     } while (choice != 0);
     

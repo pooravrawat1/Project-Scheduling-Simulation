@@ -23,11 +23,12 @@ This simulator implements **4 major scheduling algorithms**:
 ### Prerequisites
 
 - C++ compiler (g++, clang++, or Visual Studio)
+- GNU Make (usually pre-installed on Linux/Mac)
 - Text editor for creating the input file
 
-### Installation
+### Installation & Build
 
-1. **Save the code** as `scheduler.cpp`
+1. **Clone or download the repository**
 
 2. **Create the input file** `processes.txt` in the same directory:
 
@@ -47,27 +48,29 @@ PID Arrival_Time Burst_Time Priority
 - **Burst_Time**: How long the process needs the CPU
 - **Priority**: Priority level (lower number = higher priority)
 
-3. **Compile the program:**
+
+3. **Build the program using Makefile:**
 
 ```bash
-# On Linux/Mac:
-g++ -o scheduler scheduler.cpp
-
-# On Windows (MinGW):
-g++ -o scheduler.exe scheduler.cpp
-
-# On Windows (Visual Studio):
-cl scheduler.cpp
+make
 ```
 
 4. **Run the program:**
 
 ```bash
-# Linux/Mac:
-./scheduler
+make run
+```
 
-# Windows:
-scheduler.exe
+5. **Clean build files (optional):**
+
+```bash
+make clean
+```
+
+6. **Force rebuild (optional):**
+
+```bash
+make rebuild
 ```
 
 ## 📖 How to Use
@@ -79,16 +82,12 @@ scheduler.exe
 ========================================
 SELECT AN OPTION:
 1. First-Come, First-Served (FCFS)
-2. Shortest Job First (SJF)
-3. Round Robin (RR)
-4. Priority Scheduling
-5. Compare All Algorithms
+2. Round Robin (RR)
 0. Exit
 ```
 
-3. **Select an algorithm** (1-4) to see it in action
+3. **Select an algorithm** (1-2) to see it in action
 4. For **Round Robin**, you'll be asked to enter a time quantum (try 2 or 3)
-5. **Option 5** compares all algorithms at once
 6. Press **0** to exit
 
 ## 📊 Understanding the Output
